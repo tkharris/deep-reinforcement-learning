@@ -12,9 +12,12 @@ class Agent:
         """
         self.nA = nA
         self.Q = defaultdict(lambda: np.zeros(self.nA))
-        self.epsilon = 0.05
-        self.alpha = 0.1
+        self.epsilon = 1.0
+        self.epsilon_min = 0.0005
+        self.alpha = 0.75
         self.gamma = 0.99
+        self.num_eps = 0
+        print("epsilon: {}, epsilon_min: {}, alpha: {}, gamma: {}".format(self.epsilon, self.epsilon_min, self.alpha, self.gamma))
 
     def select_action(self, state):
         """ Given the state, select an action.
@@ -43,5 +46,9 @@ class Agent:
         - next_state: the current state of the environment
         - done: whether the episode is complete (True or False)
         """
-        G = reward + self.gamma*max(self.Q[next_state])
+        #G = reward + self.gamma*max(self.Q[next_state])
+        G = reward + self.gamma*np.dot(self.Q[next_state], self.probs)
         self.Q[state][action] = (1-self.alpha)*self.Q[state][action] + self.alpha*G
+        if done: 
+            self.num_eps += 1
+            self.epsilon = max(self.epsilon_min, 1.0/self.num_eps)
