@@ -13,9 +13,9 @@ class Agent:
         self.nA = nA
         self.Q = defaultdict(lambda: np.zeros(self.nA))
         self.epsilon = 1.0
-        self.epsilon_min = 0.0005
+        self.epsilon_min = 0.00001
         self.alpha = 0.75
-        self.gamma = 0.99
+        self.gamma = 0.999
         self.num_eps = 0
         print("epsilon: {}, epsilon_min: {}, alpha: {}, gamma: {}".format(self.epsilon, self.epsilon_min, self.alpha, self.gamma))
 
