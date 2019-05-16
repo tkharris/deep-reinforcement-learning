@@ -2,7 +2,7 @@ import numpy as np
 import random
 from collections import namedtuple, deque
 
-from model import QNetwork
+from model import DQN
 
 import torch
 import torch.nn.functional as F
@@ -34,10 +34,11 @@ class Agent():
         self.state_size = state_size
         self.action_size = action_size
         self.seed = random.seed(seed)
+        fc_layers = [100, 100, 80, 20, 10]
 
         # Q-Network
-        self.qnetwork_local = QNetwork(state_size, action_size, seed).to(device)
-        self.qnetwork_target = QNetwork(state_size, action_size, seed).to(device)
+        self.qnetwork_local = DQN(state_size, action_size, fc_layers, seed).to(device)
+        self.qnetwork_target = DQN(state_size, action_size, fc_layers, seed).to(device)
         self.criterion = torch.nn.MSELoss()
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=LR)
 
